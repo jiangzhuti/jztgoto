@@ -1,0 +1,10 @@
+{
+    "motors": {
+        "ra": {
+            "enc_port": 1,
+            "dir_port": 2,
+            "base_freq": 200,
+            "max_level": 100
+        }
+    }
+}

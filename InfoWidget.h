@@ -16,6 +16,14 @@ public:
     ~InfoWidget();
 
 private:
+    void show_ip();
+    void show_time();
+    void show_cpu_temp();
+
+private slots:
+    void update_info();
+
+private:
     Ui::InfoWidget *ui;
 };
 

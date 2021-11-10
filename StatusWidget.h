@@ -15,6 +15,9 @@ public:
     explicit StatusWidget(QWidget *parent = nullptr);
     ~StatusWidget();
 
+public slots:
+    void update_status();
+
 private:
     Ui::StatusWidget *ui;
 };
