@@ -32,12 +32,12 @@ int main(int argc, char *argv[])
             qFatal("cannot open file %s", conf_file.toStdString().c_str());
         }
         j = nlohmann::json::parse(file);
-        MotorController::init(j);
     }  catch (std::exception& e) {
         qFatal("%s", e.what());
     }
 
     gpio_init();
+    MotorController::init(j);
 
     Widget w;
     w.show();

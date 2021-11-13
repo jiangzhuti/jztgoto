@@ -13,67 +13,207 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>4</number>
+   </property>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetFixedSize</enum>
+   </property>
+   <property name="leftMargin">
+    <number>4</number>
+   </property>
+   <property name="topMargin">
+    <number>4</number>
+   </property>
+   <property name="rightMargin">
+    <number>4</number>
+   </property>
+   <property name="bottomMargin">
+    <number>4</number>
+   </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,5">
+    <widget class="QLabel" name="labe_role">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>ROLE</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
      <item>
-      <widget class="QPushButton" name="pb_start">
-       <property name="text">
-        <string>start</string>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>4</number>
        </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="label_dir">
-           <property name="text">
-            <string>direction</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_dir_plus">
-           <property name="text">
-            <string>+</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_dir_minus">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <property name="topMargin">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
+        <number>4</number>
+       </property>
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_freq">
+         <property name="font">
+          <font>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Freq</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QLabel" name="label_level">
-           <property name="text">
-            <string>level</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_level_plus">
-           <property name="text">
-            <string>+</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_level_minus">
-           <property name="text">
-            <string>-</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="pb_start">
+         <property name="font">
+          <font>
+           <family>DejaVu Sans Mono</family>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>start</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="pb_dir_minus">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>18</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>←</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QPushButton" name="pb_dir_plus">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>18</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>→</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="pb_freq_inc">
+         <property name="baseSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>DejaVu Sans Mono</family>
+           <pointsize>18</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>↑</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_dir">
+         <property name="text">
+          <string>Dir</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QPushButton" name="pb_freq_dec">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>18</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>↓</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Glance Factor</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QDoubleSpinBox" name="sb_glance">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="minimum">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>10.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+         <property name="value">
+          <double>2.000000000000000</double>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

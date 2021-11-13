@@ -22,7 +22,7 @@ InfoWidget::InfoWidget(QWidget *parent) :
 void InfoWidget::show_time()
 {
     auto dt = QDateTime::currentDateTime();
-    ui->label_clock_val->setText(dt.toString("yyyy-MM-dd hh:mm:ss"));
+    ui->label_clock_val->setText(dt.toString("MM-dd hh:mm:ss"));
 }
 
 void InfoWidget::show_ip()

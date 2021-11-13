@@ -14,6 +14,9 @@
    <string>Informations</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_9">
+   <property name="spacing">
+    <number>2</number>
+   </property>
    <property name="sizeConstraint">
     <enum>QLayout::SetFixedSize</enum>
    </property>
@@ -40,11 +43,6 @@
         <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
           <widget class="QLabel" name="label_ip">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>IP</string>
            </property>
@@ -52,11 +50,6 @@
          </item>
          <item>
           <widget class="QLabel" name="label_clock">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>Clock</string>
            </property>
@@ -70,11 +63,6 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>Temp(CPU)</string>
            </property>
@@ -86,11 +74,6 @@
         <layout class="QVBoxLayout" name="verticalLayout_8">
          <item>
           <widget class="QLabel" name="label_ip_val">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -98,11 +81,6 @@
          </item>
          <item>
           <widget class="QLabel" name="label_clock_val">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -110,11 +88,6 @@
          </item>
          <item>
           <widget class="QLabel" name="label_cpu_temp_val">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>

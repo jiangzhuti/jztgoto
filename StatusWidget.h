@@ -2,6 +2,7 @@
 #define STATUSWIDGET_H
 
 #include <QWidget>
+#include "MotorController.h"
 
 namespace Ui {
 class StatusWidget;
@@ -16,7 +17,7 @@ public:
     ~StatusWidget();
 
 public slots:
-    void update_status();
+    void update_status(MotorRole role);
 
 private:
     Ui::StatusWidget *ui;
