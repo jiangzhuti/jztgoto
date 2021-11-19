@@ -6,7 +6,8 @@
             "pulse_port": 13,
             "base_freq": 8,
             "kc_freq": 2000,
-            "kc_time": 100
+            "kc_time": 100,
+            "dir": "-"
         },
        "ra": {
             "enc_port": 26,
@@ -14,7 +15,8 @@
             "pulse_port": 12,
             "base_freq": 206,
             "kc_freq": 2000,
-            "kc_time": 100
+            "kc_time": 100,
+            "dir": "-"
         }
     }
 }

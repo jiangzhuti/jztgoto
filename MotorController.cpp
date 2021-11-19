@@ -124,7 +124,7 @@ void Motor::apply_status(MotorStatus& new_status)
     status_shadow = status;
     status = new_status;
     gpioWrite(cfg.enc_port, PI_ON);
-    gpioDelay(0.5 * 1000);
+    gpioDelay(10 * 1000);
     gpioWrite(cfg.dir_port, status.dir == MotorDirection::PLUS ? PI_ON : PI_OFF);
     gpioHardwarePWM(cfg.pulse_port, status.freq, half_duty(status.freq));
     gpioWrite(cfg.enc_port, status.enabled ? PI_OFF : PI_ON);
@@ -186,9 +186,9 @@ void MotorController::init(const nlohmann::json &j)
             dec_cfg.kc_freq = j_dec["kc_freq"];
             dec_cfg.kc_time = j_dec["kc_time"];
             if (j_dec.contains("dir")) {
-                if (j_dec["dir"] == '+') {
+                if (j_dec["dir"] == "+") {
                     dec_cfg.dir = MotorDirection::PLUS;
-                } else if (j_dec["dir"] == '-') {
+                } else if (j_dec["dir"] == "-") {
                     dec_cfg.dir = MotorDirection::MINUS;
                 }
             }

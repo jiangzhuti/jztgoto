@@ -190,7 +190,8 @@
        <item row="5" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Glance Factor</string>
+          <string>Glance
+Factor</string>
          </property>
         </widget>
        </item>
