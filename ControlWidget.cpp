@@ -119,6 +119,7 @@ void ControlWidget::on_axis_right_y_change(double value)
         } else {
             ui->widget_ctl_dec->end_glance();
         }
+        qDebug() << __func__ << "@ " << __LINE__ << ": end glance";
         set_enable(true);
         update_ui();
         return;
@@ -130,6 +131,7 @@ void ControlWidget::on_axis_right_y_change(double value)
         } else {
             ui->widget_ctl_dec->begin_glance(MotorDirection::PLUS);
         }
+        qDebug() << __func__ << "@ " << __LINE__ << ": begin glance plus";
         set_enable(false);
         update_ui();
         return;
@@ -141,6 +143,7 @@ void ControlWidget::on_axis_right_y_change(double value)
         } else {
             ui->widget_ctl_dec->begin_glance(MotorDirection::MINUS);
         }
+        qDebug() << __func__ << "@ " << __LINE__ << ": begin glance minus";
         set_enable(false);
         update_ui();
         return;
@@ -154,11 +157,11 @@ void ControlWidget::on_button_a_change(bool pressed)
     }
     if (pressed) {
         if (motor_selected == MotorRole::RA) {
-            ui->widget_ctl_ra->sb_glance_inc();
+            ui->widget_ctl_ra->sb_glance_dec();
             return;
         }
         if (motor_selected == MotorRole::DEC) {
-            ui->widget_ctl_dec->sb_glance_inc();
+            ui->widget_ctl_dec->sb_glance_dec();
             return;
         }
     }
@@ -171,11 +174,11 @@ void ControlWidget::on_button_b_change(bool pressed)
     }
     if (pressed) {
         if (motor_selected == MotorRole::RA) {
-            ui->widget_ctl_ra->sb_glance_dec();
+            ui->widget_ctl_ra->sb_glance_inc();
             return;
         }
         if (motor_selected == MotorRole::DEC) {
-            ui->widget_ctl_dec->sb_glance_dec();
+            ui->widget_ctl_dec->sb_glance_inc();
             return;
         }
     }

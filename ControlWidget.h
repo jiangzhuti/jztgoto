@@ -48,7 +48,7 @@ private slots:
     void on_pb_reload_clicked();
 
 private:
-    static constexpr double eps = 0.1;
+    static constexpr double eps = 0.2;
     MotorRole motor_selected;
     std::optional<QGamepad> gamepad_opt;
     bool in_glance_mode;
