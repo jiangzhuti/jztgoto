@@ -5,8 +5,9 @@
 
 static inline unsigned half_duty(unsigned freq)
 {
-    unsigned period = 1e9 / freq;
-    return period / 2;
+    //unsigned period = 1e9 / freq;
+    //return period / 2;
+    return 5e5;
 }
 
 Motor::Motor(const MotorConfig& c) : cfg(c)

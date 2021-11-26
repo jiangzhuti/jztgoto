@@ -127,9 +127,9 @@ void ControlWidget::on_axis_right_y_change(double value)
     if (value > 0.0 + eps) {
         in_glance_mode = true;
         if (motor_selected == MotorRole::RA) {
-            ui->widget_ctl_ra->begin_glance(MotorDirection::PLUS);
+            ui->widget_ctl_ra->begin_glance(MotorDirection::MINUS);
         } else {
-            ui->widget_ctl_dec->begin_glance(MotorDirection::PLUS);
+            ui->widget_ctl_dec->begin_glance(MotorDirection::MINUS);
         }
         qDebug() << __func__ << "@ " << __LINE__ << ": begin glance plus";
         set_enable(false);
@@ -139,9 +139,9 @@ void ControlWidget::on_axis_right_y_change(double value)
     if (value < 0.0 - eps) {
         in_glance_mode = true;
         if (motor_selected == MotorRole::RA) {
-            ui->widget_ctl_ra->begin_glance(MotorDirection::MINUS);
+            ui->widget_ctl_ra->begin_glance(MotorDirection::PLUS);
         } else {
-            ui->widget_ctl_dec->begin_glance(MotorDirection::MINUS);
+            ui->widget_ctl_dec->begin_glance(MotorDirection::PLUS);
         }
         qDebug() << __func__ << "@ " << __LINE__ << ": begin glance minus";
         set_enable(false);

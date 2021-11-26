@@ -4,7 +4,7 @@
 
 void gpio_init()
 {
-    if (gpioInitialise() != PI_INIT_FAILED) {
+    if (gpioInitialise() == PI_INIT_FAILED) {
         qFatal("gpio init failed");
     }
 }
