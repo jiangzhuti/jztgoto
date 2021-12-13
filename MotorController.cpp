@@ -1,6 +1,8 @@
 #include <QDebug>
 #include <pigpio.h>
 
+#include <cmath>
+
 #include "MotorController.h"
 
 static inline unsigned half_duty(unsigned freq)
@@ -31,23 +33,69 @@ Motor::~Motor()
     set_enable(false);
 }
 
-void Motor::do_kc(unsigned kc_freq, unsigned kc_time)
+void Motor::change_freq(unsigned int new_freq)
 {
-    gpioHardwarePWM(cfg.pulse_port, kc_freq, half_duty(kc_freq));
-    gpioWrite(cfg.enc_port, PI_OFF);
-    gpioDelay(kc_time * 1000);
-    gpioHardwarePWM(cfg.pulse_port, status.freq, half_duty(status.freq));
+    if (!status.enabled) {
+        gpioHardwarePWM(cfg.pulse_port, new_freq, half_duty(new_freq));
+        return;
+    }
+    unsigned cur_freq = status.freq;
+    while (cur_freq != new_freq) {
+        int diff = (int)new_freq - (int)cur_freq;
+        if ((unsigned)std::abs(diff) <= smooth_delta_freq) {
+            cur_freq = new_freq;
+            gpioHardwarePWM(cfg.pulse_port, cur_freq, half_duty(cur_freq));
+            break;
+        } else {
+            if (diff > 0) {
+                cur_freq += smooth_delta_freq;
+            } else {
+                cur_freq -= smooth_delta_freq;
+            }
+            gpioHardwarePWM(cfg.pulse_port, cur_freq, half_duty(cur_freq));
+            gpioDelay(smooth_delta_time * 1000);
+        }
+    }
+}
+
+void Motor::change_enable(bool enable, bool kc)
+{
+    if (status.enabled == enable) return;
+
+    unsigned freq_save = status.freq;
+    if (!status.enabled && enable) {
+        status.freq = 0;
+        gpioHardwarePWM(cfg.pulse_port, 0, half_duty(0));
+        gpioWrite(cfg.enc_port, PI_OFF);
+        if (kc) {
+            change_freq(cfg.kc_freq);
+            gpioDelay(cfg.kc_time * 1000);
+            status.freq = cfg.kc_freq;
+        }
+        change_freq(freq_save);
+        status.freq = freq_save;
+    } else {
+        change_freq(0);
+        gpioWrite(cfg.enc_port, PI_ON);
+        gpioHardwarePWM(cfg.pulse_port, freq_save, half_duty(freq_save));
+    }
+}
+
+void Motor::change_direction(MotorDirection dir)
+{
+    if (status.dir == dir) return;
+    if (!status.enabled) {
+        gpioWrite(cfg.dir_port, dir == MotorDirection::PLUS ? PI_ON : PI_OFF);
+        return;
+    }
+    change_enable(false, true);
+    gpioWrite(cfg.dir_port, dir == MotorDirection::PLUS ? PI_ON : PI_OFF);
+    change_enable(true, true);
 }
 
 void Motor::set_enable(bool enable)
 {
-    if (enable == status.enabled) return;
-    if (enable) {
-        do_kc(cfg.kc_freq, cfg.kc_time);
-        gpioHardwarePWM(cfg.pulse_port, status.freq, half_duty(status.freq));
-    } else {
-        gpioWrite(cfg.enc_port, PI_ON);
-    }
+    change_enable(enable, true);
     status.enabled = enable;
     status_shadow = status;
 }
@@ -84,10 +132,9 @@ void Motor::freq_dec(unsigned step)
 
 void Motor::set_freq(unsigned int new_freq)
 {
+    change_freq(new_freq);
     status.freq = new_freq;
-    gpioHardwarePWM(cfg.pulse_port, status.freq, half_duty(status.freq));
-    status_shadow = status;
-}
+    status_shadow = status;}
 
 unsigned Motor::get_freq()
 {
@@ -96,12 +143,8 @@ unsigned Motor::get_freq()
 
 void Motor::set_direction(MotorDirection dir)
 {
-    if (dir == status.dir) return;
-    gpioWrite(cfg.dir_port, dir == MotorDirection::PLUS ? PI_ON : PI_OFF);
+    change_direction(dir);
     status.dir = dir;
-    if (status.enabled) {
-        do_kc(cfg.kc_freq, cfg.kc_time * 2);
-    }
     status_shadow = status;
 }
 
@@ -123,12 +166,13 @@ MotorStatus Motor::get_status()
 void Motor::apply_status(MotorStatus& new_status)
 {
     status_shadow = status;
+
+    set_enable(false);
+    set_direction(new_status.dir);
+    set_freq(new_status.freq);
+    set_enable(new_status.enabled);
+
     status = new_status;
-    gpioWrite(cfg.enc_port, PI_ON);
-    gpioDelay(10 * 1000);
-    gpioWrite(cfg.dir_port, status.dir == MotorDirection::PLUS ? PI_ON : PI_OFF);
-    gpioHardwarePWM(cfg.pulse_port, status.freq, half_duty(status.freq));
-    gpioWrite(cfg.enc_port, status.enabled ? PI_OFF : PI_ON);
 }
 
 void Motor::restore_status()

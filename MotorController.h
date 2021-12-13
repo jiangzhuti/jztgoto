@@ -66,7 +66,12 @@ public:
     void save();
     void reload();
 private:
-    void do_kc(unsigned kc_freq, unsigned kc_time);
+    static constexpr unsigned smooth_delta_freq = 500;
+    static constexpr unsigned smooth_delta_time = 50;
+
+    void change_freq(unsigned new_freq);
+    void change_enable(bool enable, bool kc);
+    void change_direction(MotorDirection dir);
     MotorConfig cfg;
     MotorStatus status;
     MotorStatus status_shadow;

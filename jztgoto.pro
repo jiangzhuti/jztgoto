@@ -34,7 +34,7 @@ FORMS += \
     StatusWidget.ui \
     Widget.ui
 
-LIBS += -lpigpio
+LIBS += -lpigpio -lm
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
