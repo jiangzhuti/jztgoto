@@ -12,14 +12,13 @@
   </property>
   <property name="font">
    <font>
-    <family>Monospace</family>
     <pointsize>12</pointsize>
    </font>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="spacing">
     <number>4</number>
    </property>
@@ -48,6 +47,46 @@
       <widget class="QLabel" name="label_status_dec">
        <property name="text">
         <string>DEC STATUS</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_track">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <kerning>true</kerning>
+        </font>
+       </property>
+       <property name="text">
+        <string>Track</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_glance">
+       <property name="text">
+        <string>Glance</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_rush">
+       <property name="text">
+        <string>Rush</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>

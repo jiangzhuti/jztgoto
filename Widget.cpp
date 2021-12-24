@@ -11,6 +11,7 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->widget_control, &ControlWidget::update_motor_status, ui->widget_status, &StatusWidget::update_status);
+    connect(ui->widget_control, &ControlWidget::update_control_mode_status, ui->widget_status, &StatusWidget::update_control_mode_status);
 }
 
 Widget::~Widget()

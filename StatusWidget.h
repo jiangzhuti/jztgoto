@@ -18,9 +18,12 @@ public:
 
 public slots:
     void update_status(MotorRole role);
+    void update_control_mode_status(MotorControlMode active_mode, MotorControlMode select_mode);
+
 
 private:
     Ui::StatusWidget *ui;
+
 };
 
 #endif // STATUSWIDGET_H

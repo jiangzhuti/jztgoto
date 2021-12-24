@@ -22,6 +22,8 @@ public:
     bool get_enabled();
     void begin_glance(MotorDirection dir);
     void end_glance();
+    void begin_rush(MotorDirection dir);
+    void end_rush();
 private:
     void pb_start_click();
     void pb_dir_plus_click();
@@ -30,6 +32,8 @@ private:
     void pb_freq_dec_click();
     void sb_glance_inc();
     void sb_glance_dec();
+    void sb_rush_inc();
+    void sb_rush_dec();
 
 signals:
     void update_motor_status();
@@ -48,7 +52,7 @@ private:
     void update_ui();
 private:
     bool enabled;
-    bool in_glance;
+    MotorControlMode mode;
     std::optional<Motor>* motor_opt;
     Ui::MotorControlWidget *ui;
 };

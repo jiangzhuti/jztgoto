@@ -5,6 +5,12 @@
 #include <optional>
 #include <nlohmann/json.hpp>
 
+enum class MotorControlMode {
+    TRACK,
+    GLANCE,
+    RUSH
+};
+
 enum class MotorDirection {
     PLUS,
     MINUS

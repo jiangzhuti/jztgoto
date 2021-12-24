@@ -21,6 +21,7 @@ public:
 
 signals:
     void update_motor_status(MotorRole);
+    void update_control_mode_status(MotorControlMode active_mode, MotorControlMode select_mode);
 
 private:
     void update_ui();
@@ -51,7 +52,9 @@ private:
     static constexpr double eps = 0.5;
     MotorRole motor_selected;
     std::optional<QGamepad> gamepad_opt;
-    bool in_glance_mode;
+    MotorControlMode run_mode;
+    MotorControlMode select_mode;
+
     Ui::ControlWidget *ui;
 };
 

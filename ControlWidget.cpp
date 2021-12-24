@@ -9,7 +9,8 @@ ControlWidget::ControlWidget(QWidget *parent) :
     ui(new Ui::ControlWidget)
 {
     ui->setupUi(this);
-    in_glance_mode = false;
+    run_mode = MotorControlMode::TRACK;
+    select_mode = MotorControlMode::GLANCE;
     motor_selected = MotorRole::RA;
     ui->widget_ctl_dec->init(MotorRole::DEC);
     ui->widget_ctl_ra->init(MotorRole::RA);
@@ -73,7 +74,7 @@ void ControlWidget::update_ui()
 
 void ControlWidget::on_axis_left_x_change(double value)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -110,93 +111,152 @@ void ControlWidget::on_axis_right_x_change(double value)
 void ControlWidget::on_axis_right_y_change(double value)
 {
     if (value >= (0.0 - eps) && value <= (0.0 + eps)) {
-        if (!in_glance_mode) {
+        if (run_mode == MotorControlMode::TRACK) {
             return;
         }
-        in_glance_mode = false;
+        run_mode = MotorControlMode::TRACK;
         if (motor_selected == MotorRole::RA) {
             ui->widget_ctl_ra->end_glance();
         } else {
             ui->widget_ctl_dec->end_glance();
         }
-        qDebug() << __func__ << "@ " << __LINE__ << ": end glance";
+        qDebug() << __func__ << "@ " << __LINE__ << ": end glance, axis value = " << value;
         set_enable(true);
         update_ui();
+        emit update_control_mode_status(run_mode, select_mode);
         return;
     }
     if (value > 0.0 + eps) {
-        in_glance_mode = true;
-        if (motor_selected == MotorRole::RA) {
-            ui->widget_ctl_ra->begin_glance(MotorDirection::MINUS);
+        if (select_mode == MotorControlMode::GLANCE || select_mode == MotorControlMode::RUSH) {
+            run_mode = select_mode;
         } else {
-            ui->widget_ctl_dec->begin_glance(MotorDirection::MINUS);
+            qFatal("select mode error");
         }
-        qDebug() << __func__ << "@ " << __LINE__ << ": begin glance plus";
+        if (motor_selected == MotorRole::RA) {
+            if (run_mode == MotorControlMode::GLANCE) {
+                ui->widget_ctl_ra->begin_glance(MotorDirection::MINUS);
+            } else if (run_mode == MotorControlMode::RUSH) {
+                ui->widget_ctl_ra->begin_rush(MotorDirection::MINUS);
+            }
+        } else {
+            if (run_mode == MotorControlMode::GLANCE) {
+                ui->widget_ctl_dec->begin_glance(MotorDirection::MINUS);
+            } else if (run_mode == MotorControlMode::RUSH) {
+                ui->widget_ctl_dec->begin_rush(MotorDirection::MINUS);
+            }
+        }
+        qDebug() << __func__ << "@ " << __LINE__ << ": begin glance plus, axis value = " << value;
         set_enable(false);
         update_ui();
+        emit update_control_mode_status(run_mode, select_mode);
         return;
     }
     if (value < 0.0 - eps) {
-        in_glance_mode = true;
-        if (motor_selected == MotorRole::RA) {
-            ui->widget_ctl_ra->begin_glance(MotorDirection::PLUS);
+        if (select_mode == MotorControlMode::GLANCE || select_mode == MotorControlMode::RUSH) {
+            run_mode = select_mode;
         } else {
-            ui->widget_ctl_dec->begin_glance(MotorDirection::PLUS);
+            qFatal("select mode error");
         }
-        qDebug() << __func__ << "@ " << __LINE__ << ": begin glance minus";
+        if (motor_selected == MotorRole::RA) {
+            if (run_mode == MotorControlMode::GLANCE) {
+                ui->widget_ctl_ra->begin_glance(MotorDirection::PLUS);
+            } else if (run_mode == MotorControlMode::RUSH) {
+                ui->widget_ctl_ra->begin_rush(MotorDirection::PLUS);
+            }
+        } else {
+            if (run_mode == MotorControlMode::GLANCE) {
+                ui->widget_ctl_dec->begin_glance(MotorDirection::PLUS);
+            } else if (run_mode == MotorControlMode::RUSH) {
+                ui->widget_ctl_dec->begin_rush(MotorDirection::PLUS);
+            }
+        }
+        qDebug() << __func__ << "@ " << __LINE__ << ": begin glance minus, axis value = " << value      ;
         set_enable(false);
         update_ui();
+        emit update_control_mode_status(run_mode, select_mode);
         return;
     }
 }
 
 void ControlWidget::on_button_a_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
     if (pressed) {
         if (motor_selected == MotorRole::RA) {
-            ui->widget_ctl_ra->sb_glance_dec();
+            if (select_mode == MotorControlMode::GLANCE) {
+                ui->widget_ctl_ra->sb_glance_dec();
+            } else if (select_mode == MotorControlMode::RUSH) {
+                ui->widget_ctl_ra->sb_rush_dec();
+            }
             return;
         }
         if (motor_selected == MotorRole::DEC) {
-            ui->widget_ctl_dec->sb_glance_dec();
-            return;
+            if (select_mode == MotorControlMode::GLANCE) {
+                ui->widget_ctl_dec->sb_glance_dec();
+            } else if (select_mode == MotorControlMode::RUSH) {
+                ui->widget_ctl_dec->sb_rush_dec();
+            }            return;
         }
     }
 }
 
 void ControlWidget::on_button_b_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
     if (pressed) {
         if (motor_selected == MotorRole::RA) {
-            ui->widget_ctl_ra->sb_glance_inc();
+            if (select_mode == MotorControlMode::GLANCE) {
+                ui->widget_ctl_ra->sb_glance_inc();
+            } else if (select_mode == MotorControlMode::RUSH) {
+                ui->widget_ctl_ra->sb_rush_inc();
+            }
             return;
         }
         if (motor_selected == MotorRole::DEC) {
-            ui->widget_ctl_dec->sb_glance_inc();
-            return;
+            if (select_mode == MotorControlMode::GLANCE) {
+                ui->widget_ctl_dec->sb_glance_inc();
+            } else if (select_mode == MotorControlMode::RUSH) {
+                ui->widget_ctl_dec->sb_rush_inc();
+            }            return;
         }
     }
 }
 
 void ControlWidget::on_button_x_change(bool pressed)
 {
-
+    if (run_mode != MotorControlMode::TRACK) {
+        return;
+    }
+    if (select_mode == MotorControlMode::GLANCE) {
+        return;
+    }
+    if (pressed) {
+        select_mode = MotorControlMode::GLANCE;
+        emit update_control_mode_status(run_mode, select_mode);
+    }
 }
 
 void ControlWidget::on_button_y_change(bool pressed)
 {
-
+    if (run_mode != MotorControlMode::TRACK) {
+        return;
+    }
+    if (select_mode == MotorControlMode::RUSH) {
+        return;
+    }
+    if (pressed) {
+        select_mode = MotorControlMode::RUSH;
+        emit update_control_mode_status(run_mode, select_mode);
+    }
 }
 
 void ControlWidget::on_button_up_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -214,7 +274,7 @@ void ControlWidget::on_button_up_change(bool pressed)
 
 void ControlWidget::on_button_down_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -232,7 +292,7 @@ void ControlWidget::on_button_down_change(bool pressed)
 
 void ControlWidget::on_button_left_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -250,7 +310,7 @@ void ControlWidget::on_button_left_change(bool pressed)
 
 void ControlWidget::on_button_right_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -268,7 +328,7 @@ void ControlWidget::on_button_right_change(bool pressed)
 
 void ControlWidget::on_button_start_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -286,7 +346,7 @@ void ControlWidget::on_button_start_change(bool pressed)
 
 void ControlWidget::on_button_r1_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -302,7 +362,7 @@ void ControlWidget::on_button_r1_change(bool pressed)
 
 void ControlWidget::on_button_r2_change(bool pressed)
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -318,7 +378,7 @@ void ControlWidget::on_button_r2_change(bool pressed)
 
 void ControlWidget::on_pb_save_clicked()
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 
@@ -333,7 +393,7 @@ void ControlWidget::on_pb_save_clicked()
 
 void ControlWidget::on_pb_reload_clicked()
 {
-    if (in_glance_mode) {
+    if (run_mode != MotorControlMode::TRACK) {
         return;
     }
 

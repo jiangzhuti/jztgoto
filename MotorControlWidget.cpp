@@ -9,7 +9,7 @@ MotorControlWidget::MotorControlWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MotorControlWidget)
 {
-    in_glance = false;
+    mode = MotorControlMode::TRACK;
     ui->setupUi(this);
 }
 
@@ -44,7 +44,7 @@ void MotorControlWidget::begin_glance(MotorDirection dir)
         return;
     }
     auto& motor = motor_opt->value();
-    if (in_glance) {
+    if (mode == MotorControlMode::GLANCE) {
         if (motor.get_direction() == dir) {
             return;
         } else {
@@ -58,7 +58,7 @@ void MotorControlWidget::begin_glance(MotorDirection dir)
     status.dir = dir;
     status.freq *= factor;
     motor.apply_status(status);
-    in_glance = true;
+    mode = MotorControlMode::GLANCE;
     update_ui();
 }
 
@@ -69,7 +69,43 @@ void MotorControlWidget::end_glance()
     }
     auto& motor = motor_opt->value();
     motor.restore_status();
-    in_glance = false;
+    mode = MotorControlMode::TRACK;
+    set_enabled(true);
+    update_ui();
+}
+
+void MotorControlWidget::begin_rush(MotorDirection dir)
+{
+    if (!motor_opt->has_value()) {
+        return;
+    }
+    auto& motor = motor_opt->value();
+    if (mode == MotorControlMode::RUSH) {
+        if (motor.get_direction() == dir) {
+            return;
+        } else {
+            motor.restore_status();
+        }
+    }
+    double factor = ui->sb_glance->value();
+    set_enabled(false);
+    MotorStatus status = motor.get_status();
+    status.enabled = true;
+    status.dir = dir;
+    status.freq *= factor;
+    motor.apply_status(status);
+    mode = MotorControlMode::RUSH;
+    update_ui();
+}
+
+void MotorControlWidget::end_rush()
+{
+    if (!motor_opt->has_value()) {
+        return;
+    }
+    auto& motor = motor_opt->value();
+    motor.restore_status();
+    mode = MotorControlMode::TRACK;
     set_enabled(true);
     update_ui();
 }
@@ -128,6 +164,16 @@ void MotorControlWidget::sb_glance_inc()
 void MotorControlWidget::sb_glance_dec()
 {
     ui->sb_glance->stepDown();
+}
+
+void MotorControlWidget::sb_rush_inc()
+{
+    ui->sb_rush->stepUp();
+}
+
+void MotorControlWidget::sb_rush_dec()
+{
+    ui->sb_rush->stepDown();
 }
 
 void MotorControlWidget::paintEvent(QPaintEvent *)
